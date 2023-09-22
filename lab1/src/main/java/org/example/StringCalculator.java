@@ -6,21 +6,21 @@ public class StringCalculator {
         if (numbers.isEmpty()) {
             return 0;
         }
-
-        String[] numberArray = numbers.split(",");
+        String[] numberArray = numbers.split("[,\\n]");
         int sum = 0;
 
         for (String number : numberArray) {
-            try {
-                int num = Integer.parseInt(number);
-                sum += num;
-            } catch (NumberFormatException e) {
-                System.err.println("Помилка: " + e.getMessage());
+                try {
+                    int num = Integer.parseInt(number);
+                    sum += num;
+                } catch (NumberFormatException e) {
+                    return 0;
+                }
             }
-        }
 
         return sum;
     }
+
 
     public static void main(String[] args) {
         StringCalculator calculator = new StringCalculator();
