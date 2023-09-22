@@ -15,7 +15,6 @@ public class StringCalculator {
                 int num = Integer.parseInt(number);
                 sum += num;
             } catch (NumberFormatException e) {
-                // Обробляємо помилку, якщо введено нечисловий рядок
                 System.err.println("Помилка: " + e.getMessage());
             }
         }
@@ -25,8 +24,8 @@ public class StringCalculator {
 
     public static void main(String[] args) {
         StringCalculator calculator = new StringCalculator();
-        String input = "1,2";
+        String input = "";
         int result = calculator.add(input);
-        System.out.println("Сума чисел: " + result);
+        System.out.println("Сума: " + result);
     }
 }
