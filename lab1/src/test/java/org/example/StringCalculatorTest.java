@@ -32,4 +32,16 @@ public class StringCalculatorTest {
         int result = calculator.add("10,2");
         assertEquals(12, result);
     }
+    @Test
+    public void step2_test1_3numbers() {
+        StringCalculator calculator = new StringCalculator();
+        int result = calculator.add("10,2,2");
+        assertEquals(14, result);
+    }
+    @Test
+    public void step2_test2_2numbers() {
+        StringCalculator calculator = new StringCalculator();
+        int result = calculator.add("10,2,,");
+        assertEquals(12, result);
+    }
 }
