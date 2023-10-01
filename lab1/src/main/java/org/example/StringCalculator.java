@@ -10,6 +10,8 @@ public class StringCalculator {
         if (numbers.startsWith("//")) {
             int end_index = numbers.length();
             char delimiter = numbers.charAt(2);
+            if(numbers.contains(",")) numbers = numbers.replace(',', delimiter);
+            if(numbers.contains("\n")) numbers = numbers.replace('\n', delimiter);
             numberArray = numbers.substring(4, end_index).split(String.valueOf("\\" + delimiter));
         } else {
             numberArray = numbers.split("[,\\n]");
@@ -39,7 +41,7 @@ public class StringCalculator {
     }
     public static void main(String[] args) {
         StringCalculator calculator = new StringCalculator();
-        String input = "//.\n1.2";
+        String input = "//*\n1*1,1001,1\n1\n1*1";
         try {
             int result = calculator.add(input);
             System.out.println("Сума: " + result);
