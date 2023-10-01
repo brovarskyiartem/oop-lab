@@ -13,9 +13,13 @@ public class StringCalculator {
             if(!delim.equals("[")){
                 int end_index = numbers.length();
                 char delimiter = numbers.charAt(2);
+                if(numbers.contains(",")) numbers = numbers.replace(',', delimiter);
+                if(numbers.contains("\n")) numbers = numbers.replace('\n', delimiter);
                 numberArray = numbers.substring(4, end_index).split(String.valueOf("\\" + delimiter));
             }else{
                 char delimiter = numbers.charAt(3);
+                if(numbers.contains(",")) numbers = numbers.replace(',', delimiter);
+                if(numbers.contains("\n")) numbers = numbers.replace('\n', delimiter);
                 numbers = numbers.replaceAll("(.)\\1+", "$1");
                 int end_index = numbers.length();
                 numberArray = numbers.substring(5, end_index).split(String.valueOf("\\" + delimiter ));
@@ -48,7 +52,7 @@ public class StringCalculator {
     }
     public static void main(String[] args) {
         StringCalculator calculator = new StringCalculator();
-        String input = "//[{]\n1{{2";
+        String input = "//[{]\n1{{2,,4\n3";
         try {
             int result = calculator.add(input);
             System.out.println("Сума: " + result);
