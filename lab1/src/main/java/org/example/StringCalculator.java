@@ -22,13 +22,12 @@ public class StringCalculator {
                 if(numbers.contains("\n")) numbers = numbers.replace('\n', delimiter);
                 numbers = numbers.replaceAll("(.)\\1+", "$1");
                 int end_index = numbers.length();
-                numberArray = numbers.substring(5, end_index).split(String.valueOf("\\" + delimiter ));
+                numberArray = numbers.substring(5, end_index).split(String.valueOf(delimiter ));
             }
         } else {
             numberArray = numbers.split("[,\\n]");
         }
         int sum = 0;
-
         List<Integer> negativenumberArray = new ArrayList<>();
         for (String number_neg : numberArray) {
             try {
@@ -36,7 +35,7 @@ public class StringCalculator {
                 if (num < 0) {
                     negativenumberArray.add(num);
                 } else if(num > 1000) {
-                 continue;
+                    continue;
                 }
                 else {
                     sum += num;
@@ -52,12 +51,12 @@ public class StringCalculator {
     }
     public static void main(String[] args) {
         StringCalculator calculator = new StringCalculator();
-        String input = "//[{]\n1{{2,,4\n3";
+        String input =  "//[aaa]\n1,1aaa1\n1,1,1";
         try {
             int result = calculator.add(input);
             System.out.println("Сума: " + result);
         }catch (RuntimeException e){
             System.err.println(e.getMessage());
-            }
         }
     }
+}
