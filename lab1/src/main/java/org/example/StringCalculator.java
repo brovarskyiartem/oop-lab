@@ -17,7 +17,7 @@ public class StringCalculator {
                 char delimiter = numbers.charAt(2);
                 numberArray = numbers.substring(4, end_index).split(String.valueOf("\\" + delimiter));
             }else{
-                numbers = numbers.replaceAll("(.)\\1+", "$1");
+                numbers = numbers.replaceAll("([^\\d])(\\1+)", "$1");
                 numbers = numbers.replaceAll("[\n]+", "\n");
                 String customDelim = numbers.substring(2, numbers.indexOf("\n"));
                 String newNumbers = numbers.substring(numbers.indexOf("\n") + 1);
@@ -56,7 +56,7 @@ public class StringCalculator {
     }
     public static void main(String[] args) {
         StringCalculator calculator = new StringCalculator();
-        String input = "//[{][*]\n1{2,,,,3\n\n\n3*2";
+        String input = "//[a][aaa][aaaa]\n1,1a1001aaaa1a1005";
         try {
             int result = calculator.add(input);
             System.out.println("Сума: " + result);
