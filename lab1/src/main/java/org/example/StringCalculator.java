@@ -10,6 +10,8 @@ public class StringCalculator {
         if (numbers.startsWith("//")) {
             int end_index = numbers.length();
             char delimiter = numbers.charAt(2);
+            if(numbers.contains(",")) numbers = numbers.replace(',', delimiter);
+            if(numbers.contains("\n")) numbers = numbers.replace('\n', delimiter);
             numberArray = numbers.substring(4, end_index).split(String.valueOf("\\" + delimiter));
         } else {
             numberArray = numbers.split("[,\\n]");
