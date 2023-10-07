@@ -24,7 +24,7 @@ public class StringCalculator {
                 int num = Integer.parseInt(number);
                 sum += num;
             } catch (NumberFormatException e) {
-                return 0;
+                throw new RuntimeException("Not corerect input");
             }
         }
 
@@ -34,7 +34,7 @@ public class StringCalculator {
 
     public static void main(String[] args) {
         StringCalculator calculator = new StringCalculator();
-        String input = "//,\n1,2,3";
+        String input = "//*\n1,2\n3,j";
         int result = calculator.add(input);
         System.out.println("Сума: " + result);
     }
