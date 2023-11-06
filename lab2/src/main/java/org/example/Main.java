@@ -4,14 +4,20 @@ import static org.example.matrix.*;
 
 public class Main {
     public static void main(String[] args){
-/*        //Заповнення матриці
-            //Пуста матриця
+      //Заповнення матриці
+        /*    //Пуста матриця
                 matrix matrix_1 = new matrix();
                 matrix_1.printMatrix(); */
-             //Матриця заданого розміру
-              /*  matrix matrix_2 = new matrix(2,2);
-                matrix_2.fillRandom();
-                matrix_2.printMatrix();/*
+       /*      //Матриця заданого розміру
+                matrix matrix_1 = new matrix(2,2);
+                matrix_1.fillRandom();
+                matrix_1.printMatrix();
+                ImmutableMatrix matrix_2 = new ImmutableMatrix(matrix_1);
+                matrix_2.printMatrix();
+                System.out.println(matrix_1.equals(matrix_2));
+                matrix_1.fill_one(1,1,-100);
+                matrix_1.printMatrix();
+                Add(matrix_1,matrix_2).printMatrix();/*
             //Матриця за данними
                 double[][] data = {{1,2},{3,4},{5,6}};
                 matrix matrix_3 = new matrix(data);*/
@@ -72,12 +78,15 @@ public class Main {
         createRandomColumn(3).printMatrix();
 */
         //Перетворення в обернену матрицю
-        double[][] data = {{1, 2}, {1, 1}};
-        matrix matrix_1 = new matrix(2,2);
-        matrix_1.fill(data);
+        double[][] data = {{1,1,2}, {1, 2,1},{5,6,3}};
+        matrix matrix_2 = new matrix(3,3);
+        matrix_2.fill(data);
+        ImmutableMatrix matrix_1 = new ImmutableMatrix(matrix_2);
+        System.out.println(matrix_2.equals(matrix_2));
         System.out.println("Початкова матриця");
         matrix_1.printMatrix();
-        System.out.println("Результат");
-        calculateInverseMatrix(matrix_1).printMatrix();
+        System.out.println("Результуюча матриця");
+        ImmutableMatrix res = new ImmutableMatrix(calculateInverseMatrix(matrix_1));
+        res.printMatrix();
     }
 }

@@ -70,7 +70,7 @@ public class matrix {
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                double randomValue = rand.nextInt(10)+1;
+                double randomValue = rand.nextInt(20)+1;
                 data[i][j] = randomValue;
             }
         }
