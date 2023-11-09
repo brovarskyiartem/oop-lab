@@ -117,11 +117,13 @@ public class matrix {
         return dimension;
     }
     //6. Визначити методи equals/hashCode
-    @Override
+        @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof matrix)) return false;
+        if (obj instanceof ImmutableMatrix) return false;
         matrix other = (matrix) obj;
+        if (this.hashCode()!= obj.hashCode()) return false;
         return Arrays.deepEquals(data, other.data);
     }
 
