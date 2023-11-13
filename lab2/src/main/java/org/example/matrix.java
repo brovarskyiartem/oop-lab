@@ -43,6 +43,8 @@ public class matrix {
         }
     }
     matrix(double[][] old) {
+        this.rows = old.length;
+        this.columns = old[0].length;
         this.data = new double[rows][columns];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
@@ -50,6 +52,7 @@ public class matrix {
             }
         }
     }
+
     //3.Додати методи, що дозволяють заповнити матрицю значеннями
     public void fill_one(int row, int column, double value) {
         if (row < 0 || row >= rows || column < 0 || column >= columns) {
@@ -117,14 +120,14 @@ public class matrix {
         return dimension;
     }
     //6. Визначити методи equals/hashCode
-        @Override
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof matrix)) return false;
         if (obj instanceof ImmutableMatrix) return false;
         matrix other = (matrix) obj;
         if (this.hashCode()!= obj.hashCode()) return false;
-        return Arrays.deepEquals(data, other.data);
+        return Arrays.deepEquals(this.data, other.data);
     }
 
     @Override
@@ -147,6 +150,9 @@ public class matrix {
 
     public static matrix multiplication_scalar(matrix matrix, int scalar) {
         matrix resault = new matrix(matrix);
+        if (matrix.getRows() < 0 || matrix.getColumns() < 0) {
+            throw new IllegalArgumentException("Invalid matrix element access.");
+        }
         for (int i = 0; i < matrix.getRows(); i++) {
             for (int j = 0; j < matrix.getColumns(); j++) {
                 resault.data[i][j] = matrix.get_element(i, j) * scalar;
@@ -248,55 +254,88 @@ public class matrix {
 
             return column;
         }
-    public static matrix calculateInverseMatrix(matrix inputMatrix) {
-        int n = inputMatrix.getRows();
-        double[][] matrixData = new double[n][n];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                matrixData[i][j] = inputMatrix.get_element(i, j);
+        //15. Створення оберненої матриці
+    public matrix inverseMatrix() {
+        if (rows != columns) {
+            throw new IllegalArgumentException("Матриця повинна бути квадратною для знаходження оберненої матриці.");
+        }
+
+        double determinant = determinant(data);
+        if (determinant == 0) {
+            throw new IllegalArgumentException("Матриця є сингулярною, обернена матриця не існує.");
+        }
+
+        matrix inverse = new matrix(rows, columns);
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                matrix minorMatrix = createMinorMatrix(i, j);
+                double minorDeterminant = determinant(minorMatrix.data);
+                double cofactor = Math.pow(-1, i + j) * minorDeterminant;
+                inverse.data[j][i] = cofactor / determinant;
             }
         }
-        matrix augmentedMatrix = new matrix(n, 2 * n);
-        // Створення початкового розширеного матриці [A | I]
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                augmentedMatrix.fill_one(i, j, matrixData[i][j]);
-                augmentedMatrix.fill_one(i, j + n, (i == j) ? 1.0 : 0.0);
+
+        return inverse;
+    }
+
+    // Метод для створення мінорної матриці
+    private matrix createMinorMatrix(int row, int col) {
+        matrix minorMatrix = new matrix(rows - 1, columns - 1);
+
+        for (int i = 0, newRow = 0; i < rows; i++) {
+            if (i == row) continue;
+            for (int j = 0, newCol = 0; j < columns; j++) {
+                if (j == col) continue;
+                minorMatrix.data[newRow][newCol] = data[i][j];
+                newCol++;
             }
+            newRow++;
         }
-        // метод Гаусса-Джордана
+
+        return minorMatrix;
+    }
+    // Приватний статичний метод для обчислення детермінанта матриці
+    private static double determinant(double[][] matrix) {
+        int n = matrix.length;
+
+        if (n == 1) {
+            return matrix[0][0];
+        }
+
+        if (n == 2) {
+            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+        }
+
+        double det = 0;
         for (int i = 0; i < n; i++) {
-            double pivot = augmentedMatrix.get_element(i, i);
+            det += Math.pow(-1, i) * matrix[0][i] * determinant(minor(matrix, 0, i));
+        }
 
-            if (pivot == 0.0) {
-                System.err.println("Matrix is singular (not invertible).");
-                return null;
-            }
+        return det;
+    }
+    // метод для отримання мінорної матриці
+    private static double[][] minor(double[][] matrix, int row, int col) {
+        int n = matrix.length;
+        double[][] minor = new double[n - 1][n - 1];
 
-            for (int j = 0; j < 2 * n; j++) {
-                double value = augmentedMatrix.get_element(i, j) / pivot;
-                augmentedMatrix.fill_one(i, j, value);
-            }
-
-            for (int k = 0; k < n; k++) {
-                if (k != i) {
-                    double factor = augmentedMatrix.get_element(k, i);
-                    for (int j = 0; j < 2 * n; j++) {
-                        double newValue = augmentedMatrix.get_element(k, j) - factor * augmentedMatrix.get_element(i, j);
-                        augmentedMatrix.fill_one(k, j, newValue);
+        for (int i = 0, p = 0; i < n; i++) {
+            if (i != row) {
+                for (int j = 0, q = 0; j < n; j++) {
+                    if (j != col) {
+                        minor[p][q++] = matrix[i][j];
                     }
                 }
+                p++;
             }
         }
-        // Вилучення оберненої матриці [I | A^(-1)]
-        matrix inverseMatrix = new matrix(n, n);
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                inverseMatrix.fill_one(i, j, augmentedMatrix.get_element(i, j + n));
-            }
-        }
-        return inverseMatrix;
+
+        return minor;
     }
- }
+}
+
+
+
+
 
 
